@@ -21,23 +21,30 @@ module Enumarable
   end
 
   def my_any?
-
+    self.my_each { |e| return true if yield(e) }
+    return false
   end
 
   def my_none?
-
+    self.my_each { |e| return false if yield(e) }
+    return true
   end
 
   def my_count
-
+    count = 0
+    self.my_each { |e| count += 1 }
+    return count
   end
 
   def my_map
-
+    arr = []
+    self.my_each { |e| arr << yield(e) }
+    return arr
   end
 
   def my_inject
-
+    sum = 0
+    self.my_each { |e| sum += yield(e) }
+    return sum
   end
 end
-

@@ -36,15 +36,18 @@ module Enumarable
     return count
   end
 
-  def my_map
-    arr = []
-    self.my_each { |e| arr << yield(e) }
-    return arr
+  def my_map proc = nil
+    result = []
+    if proc
+      self.my_each { |e| result << proc.call(e) }
+    else
+      self.my_each { |e| result << yield(e) }
+    end
+    result
   end
 
-  def my_inject
-    sum = 0
-    self.my_each { |e| sum += yield(e) }
-    return sum
+  def my_inject result
+    self.my_each { |e| result = yield(result,e) }
+    return result
   end
 end

@@ -31,30 +31,30 @@ RSpec.describe Enumerable do
 
   end
   describe "#my_each_with_index" do
-    it "should get element by index" do
-      array = [1,2,3,4,5,6,7,8,9,10]
+    it "should return an element by index" do
+      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       expect(array.my_each_with_index(0)).to eql(1)
     end
 
     it "should work with object data" do
-      object_array = [MockObject.new('first','object'),
-                      MockObject.new('second', 'object'),
-                      MockObject.new('third', 'object')]
-      expect(object_array.my_each_with_index(0).variable).to eql('first')
-      expect(object_array.my_each_with_index(0).other_variable).to eql('object')
-      expect(object_array.my_each_with_index(1).variable).to eql('second')
-      expect(object_array.my_each_with_index(1).other_variable).to eql('object')
-      expect(object_array.my_each_with_index(2).variable).to eql('third')
-      expect(object_array.my_each_with_index(2).other_variable).to eql('object')
+      mock_object_1 = MockObject.new('first','object')
+      mock_object_2 = MockObject.new('first','object')
+      mock_object_3 = MockObject.new('first','object')
+
+      object_array = [mock_object_1, mock_object_2, mock_object_3]
+
+      expect(object_array.my_each_with_index(0)).to eql(mock_object_1)
+      expect(object_array.my_each_with_index(1)).to eql(mock_object_2)
+      expect(object_array.my_each_with_index(2)).to eql(mock_object_3)
     end
 
     it "should return nil when index is not found" do
-      array = [1,2,3,4,5,6,7,8,9,10]
+      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       expect(array.my_each_with_index(999)).to eql(nil)
     end
 
     it "should return from the end of the array with backward when the index value is negative" do
-      array = [1,2,3,4,5,6,7,8,9,10]
+      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       counter = array.length - 1
       backward_counter = -1
       array.length.times do
@@ -66,63 +66,62 @@ RSpec.describe Enumerable do
   end
 
   describe "#my_select" do
-    it "should return a new list that contains elements that matches with given block condition" do
-      numbers = [1,2,3,4,5,6,7,8,9,10]
-      even_numbers = numbers_array.my_select { |e| e.even? }
+    it "should return a new list that contains elements that matches with the given block condition" do
+      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      even_numbers = numbers.my_select { |e| e.even? }
       expect(even_numbers).to be_an_instance_of(Array)
-      expect(even_numbers).to eql([2,4,6,8,10])
+      expect(even_numbers).to eql([2, 4, 6, 8, 10])
     end
   end
 
   describe "#my_all?" do
-    it "Should return a boolean" do
-      array = [1,2,3,4,5,6,7,8,9,10]
-      expect(array.my_all? {|e| e % 2 == 0 }).to be(true).or be(false)
+    it "should return a boolean" do
+      expect([1, 2, 3].my_all? { }).to be(true).or be(false)
     end
 
-    it "Should return true if given condition matches with a Array" do
-      array = [1,2,3,4,5,6,7,8,9,10]
-      expect(array.my_all? {|e| e > 0 }).to eql(true)
+    it "should return true if each element matches with given condition" do
+      positive_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+      expect(positive_numbers.my_all? { |e| e > 0 }).to eql(true)
     end
 
-    it "Should return false if given condition doesn't match with a Array" do
-      array = [1,2,3,4,5,6,7,8,9,10]
-      expect(array.my_all? {|e| e < 0 }).to eql(false)
+    it "should return false if each element doesn't match with the given block condition" do
+      numbers = [-3, -2, -1, 0, 1, 2, 3]
+      expect(numbers.my_all? { |e| e > 0 }).to eql(false)
     end
   end
 
 
     describe "#my_any?" do
       it "Should return a boolean" do
-        array = [1,2,3,4,5,6,7,8,9,10]
-        expect(array.my_any? {|e| e % 2 == 0 }).to be(true).or be(false)
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        expect(numbers.my_any? { |e| e.even? }).to be(true).or be(false)
       end
 
-      it "Should return true if any element provides given condition" do
-        array = [1,2,3,4,5,6,7,8,9,-10]
-        expect(array.my_any? {|e| e < 0 }).to eql(true)
+      it "Should return true if any element provides given block condition" do
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, -10]
+        expect(numbers.my_any? { |e| e < 0 }).to eql(true)
       end
 
-      it "Should return false if any element doesn't provide given condition" do
-        array = [1,2,3,4,5,6,7,8,9,10]
-        expect(array.my_any? {|e| e < 0 }).to eql(false)
+      it "Should return false if any element doesn't provide the given block condition" do
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        expect(numbers.my_any? { |e| e < 0 }).to eql(false)
       end
     end
 
     describe "#my_none?" do
-      it "Should return a boolean" do
-        array = [1,2,3,4,5,6,7,8,9,10]
-        expect(array.my_none? {|e| e % 2 == 0 }).to be(true).or be(false)
+      it "should return a boolean" do
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        expect(numbers.my_none? { |e| e.even? }).to be(true).or be(false)
       end
 
-      it "Should return true if any element doesn't provides any condition" do
-        array = [1,2,3,4,5,6,7,8,9,10]
-        expect(array.my_none? {|e| e < 0 }).to eql(true)
+      it "should return true if any element doesn't provide the given block condition" do
+        numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
+        expect(numbers.my_none? { |e| e < 0 }).to eql(true)
       end
 
-      it "Should return false if any element provides given condition" do
-        array = [1,-2,3,4,5,-6,7,8,9,10]
-        expect(array.my_none? {|e| e < 0 }).to eql(false)
+      it "should return false if any element provides the given block condition" do
+        numbers = [-3, -2, -1, 0, 1, 2, 3]
+        expect(numbers.my_none? { |e| e < 0 }).to eql(false)
       end
     end
 

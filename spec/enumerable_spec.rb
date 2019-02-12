@@ -66,14 +66,11 @@ RSpec.describe Enumerable do
   end
 
   describe "#my_select" do
-    it "Should return all element that matches with given block" do
-      array = [1,2,3,4,5,6,7,8,9,10]
-      expect(array.my_select {|e| e % 2 == 0}).to eql([2,4,6,8,10])
-    end
-
-    it "should return new array" do
-      array = [1,2,3,4,5,6,7,8,9,10]
-      expect(array.my_select {|e| e % 2 == 0}).to be_instance_of(Array)
+    it "should return a new list that contains elements that matches with given block condition" do
+      numbers = [1,2,3,4,5,6,7,8,9,10]
+      even_numbers = numbers_array.my_select { |e| e.even? }
+      expect(even_numbers).to be_an_instance_of(Array)
+      expect(even_numbers).to eql([2,4,6,8,10])
     end
   end
 

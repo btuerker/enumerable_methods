@@ -1,5 +1,5 @@
-require './enumarable.rb'
-include Enumarable
+require './lib/enumerable.rb'
+include Enumerable
 
 
 def multiply_els(arr)

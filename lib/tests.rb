@@ -116,4 +116,6 @@ print "Test with both block and proc"
 print [5,0,7,0,11,33,54].my_map(multiply_by_10_proc) { |x| x * 3 }
 
 
+[1,2,3
+
 

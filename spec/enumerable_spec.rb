@@ -97,12 +97,12 @@ RSpec.describe Enumerable do
         expect(numbers.my_any? { |e| e.even? }).to be(true).or be(false)
       end
 
-      it "Should return true if any element provides given block condition" do
+      it "should return true if any element provides the given block condition" do
         numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, -10]
         expect(numbers.my_any? { |e| e < 0 }).to eql(true)
       end
 
-      it "Should return false if any element doesn't provide the given block condition" do
+      it "should return false if any element doesn't provide the given block condition" do
         numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
         expect(numbers.my_any? { |e| e < 0 }).to eql(false)
       end

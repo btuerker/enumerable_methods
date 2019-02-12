@@ -64,4 +64,69 @@ RSpec.describe Enumerable do
       end
     end
   end
+
+  describe "#my_select" do
+    it "Should return all element that matches with given block" do
+      array = [1,2,3,4,5,6,7,8,9,10]
+      expect(array.my_select {|e| e % 2 == 0}).to eql([2,4,6,8,10])
+    end
+
+    it "should return new array" do
+      array = [1,2,3,4,5,6,7,8,9,10]
+      expect(array.my_select {|e| e % 2 == 0}).to be_instance_of(Array)
+    end
+  end
+
+  describe "#my_all?" do
+    it "Should return a boolean" do
+      array = [1,2,3,4,5,6,7,8,9,10]
+      expect(array.my_all? {|e| e % 2 == 0 }).to be(true).or be(false)
+    end
+
+    it "Should return true if given condition matches with a Array" do
+      array = [1,2,3,4,5,6,7,8,9,10]
+      expect(array.my_all? {|e| e > 0 }).to eql(true)
+    end
+
+    it "Should return false if given condition doesn't match with a Array" do
+      array = [1,2,3,4,5,6,7,8,9,10]
+      expect(array.my_all? {|e| e < 0 }).to eql(false)
+    end
+  end
+
+
+    describe "#my_any?" do
+      it "Should return a boolean" do
+        array = [1,2,3,4,5,6,7,8,9,10]
+        expect(array.my_any? {|e| e % 2 == 0 }).to be(true).or be(false)
+      end
+
+      it "Should return true if any element provides given condition" do
+        array = [1,2,3,4,5,6,7,8,9,-10]
+        expect(array.my_any? {|e| e < 0 }).to eql(true)
+      end
+
+      it "Should return false if any element doesn't provide given condition" do
+        array = [1,2,3,4,5,6,7,8,9,10]
+        expect(array.my_any? {|e| e < 0 }).to eql(false)
+      end
+    end
+
+    describe "#my_none?" do
+      it "Should return a boolean" do
+        array = [1,2,3,4,5,6,7,8,9,10]
+        expect(array.my_none? {|e| e % 2 == 0 }).to be(true).or be(false)
+      end
+
+      it "Should return true if any element doesn't provides any condition" do
+        array = [1,2,3,4,5,6,7,8,9,10]
+        expect(array.my_none? {|e| e < 0 }).to eql(true)
+      end
+
+      it "Should return false if any element provides given condition" do
+        array = [1,-2,3,4,5,-6,7,8,9,10]
+        expect(array.my_none? {|e| e < 0 }).to eql(false)
+      end
+    end
+
 end

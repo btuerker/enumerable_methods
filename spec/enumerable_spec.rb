@@ -1,74 +1,34 @@
 require('./lib/enumerable.rb')
 include Enumerable
 
-class MockObject
-  attr_reader :variable, :other_variable
-  def initialize variable = 'hello', other_variable = 'world'
-    @variable = variable
-    @other_variable = other_variable
-  end
-end
 
 RSpec.describe Enumerable do
+  let(:array){[1, 2, 3, 4, 5, 6, 7, 8, 9, 10]}
   describe "#my_each" do
     it "should access all element in given array" do
       counter = 0
-      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
       array.my_each do |e|
         expect(e).to eql(array[counter])
         counter += 1
       end
       expect(counter).to eql(array.length)
     end
-
-    it "should work with object data" do
-      object_array = [MockObject.new, MockObject.new, MockObject.new]
-      object_array.my_each do |e|
-        expect(e.variable).to eql('hello')
-        expect(e.other_variable).to eql('world')
-      end
-    end
-
   end
+
   describe "#my_each_with_index" do
-    it "should return an element by index" do
-      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(array.my_each_with_index(0)).to eql(1)
-    end
+    it "should return a new Hash with keys as indexes" do
 
-    it "should work with object data" do
-      mock_object_1 = MockObject.new('first','object')
-      mock_object_2 = MockObject.new('first','object')
-      mock_object_3 = MockObject.new('first','object')
-
-      object_array = [mock_object_1, mock_object_2, mock_object_3]
-
-      expect(object_array.my_each_with_index(0)).to eql(mock_object_1)
-      expect(object_array.my_each_with_index(1)).to eql(mock_object_2)
-      expect(object_array.my_each_with_index(2)).to eql(mock_object_3)
-    end
-
-    it "should return nil when index is not found" do
-      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(array.my_each_with_index(999)).to eql(nil)
-    end
-
-    it "should return from the end of the array with backward when the index value is negative" do
-      array = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      counter = array.length - 1
-      backward_counter = -1
-      array.length.times do
-        expect(array.my_each_with_index(backward_counter)).to eql(array[counter])
-        counter -= 1
-        backward_counter -= 1
+      hash_with_index = array.my_each_with_index
+      expect(hash_with_index).to be_instance_of(Hash)
+      for i in 0...array.length
+        expect(hash_with_index[i]).to eql(array[i])
       end
     end
   end
 
   describe "#my_select" do
     it "should return a new list that contains elements that matches with the given block condition" do
-      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      even_numbers = numbers.my_select { |e| e.even? }
+      even_numbers = array.my_select { |e| e.even? }
       expect(even_numbers).to be_an_instance_of(Array)
       expect(even_numbers).to eql([2, 4, 6, 8, 10])
     end
@@ -80,8 +40,7 @@ RSpec.describe Enumerable do
     end
 
     it "should return true if each element matches with given condition" do
-      positive_numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(positive_numbers.my_all? { |e| e > 0 }).to eql(true)
+      expect(array.my_all? { |e| e > 0 }).to eql(true)
     end
 
     it "should return false if each element doesn't match with the given block condition" do
@@ -93,8 +52,7 @@ RSpec.describe Enumerable do
 
   describe "#my_any?" do
     it "Should return a boolean" do
-      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(numbers.my_any? { |e| e.even? }).to be(true).or be(false)
+      expect(array.my_any? { |e| e.even? }).to be(true).or be(false)
     end
 
     it "should return true if any element provides the given block condition" do
@@ -103,20 +61,17 @@ RSpec.describe Enumerable do
     end
 
     it "should return false if any element doesn't provide the given block condition" do
-      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(numbers.my_any? { |e| e < 0 }).to eql(false)
+      expect(array.my_any? { |e| e < 0 }).to eql(false)
     end
   end
 
   describe "#my_none?" do
     it "should return a boolean" do
-      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(numbers.my_none? { |e| e.even? }).to be(true).or be(false)
+      expect(array.my_none? { |e| e.even? }).to be(true).or be(false)
     end
 
     it "should return true if any element doesn't provide the given block condition" do
-      numbers = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10]
-      expect(numbers.my_none? { |e| e < 0 }).to eql(true)
+      expect(array.my_none? { |e| e < 0 }).to eql(true)
     end
 
     it "should return false if any element provides the given block condition" do
@@ -132,16 +87,14 @@ RSpec.describe Enumerable do
     end
 
     it "should return size of array" do
-      array = [1,2,3,4,5]
       expect(array.my_count).to eql(array.length)
-      expect(array.my_count).to eql(5)
     end
   end
 
   describe "#my_map" do
     it "should return a new array processed by the given block" do
       numbers = [1,2,3,4,5]
-      numbers_powed = numbers.my_map { |e| e = e * e }
+      numbers_powed = numbers.my_map { |e| e ** 2 }
       expect(numbers_powed).to be_instance_of(Array)
       expect(numbers_powed).to eql([1,4,9,16,25])
     end
@@ -150,10 +103,10 @@ RSpec.describe Enumerable do
   describe "#my_inject" do
     it "should make calculation memoizated value" do
       numbers = [1,2,3,4,5]
-      sum = numbers.inject { |memo, e| memo + e }
+      sum = numbers.my_inject(0) { |memo, e| memo + e }
       expect(sum).to eql(15)
       words = %w{ cat sheep bear }
-      longest_word = words.inject { |memo, word| (memo.length > word.length)? memo : word }
+      longest_word = words.my_inject("") { |memo, word| (memo.length > word.length)? memo : word }
       expect(longest_word).to eql('sheep')
     end
   end

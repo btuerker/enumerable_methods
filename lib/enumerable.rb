@@ -5,8 +5,14 @@ module Enumerable
     end
   end
 
-  def my_each_with_index(index)
-    return self[index]
+  def my_each_with_index
+    result = Hash.new
+    counter = 0
+    self.my_each do |e|
+      result[counter] = e
+      counter += 1
+    end
+    return result
   end
 
   def my_select
